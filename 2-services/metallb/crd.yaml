@@ -1497,14 +1497,6 @@ rules:
   - create
   - patch
 - apiGroups:
-  - policy
-  resourceNames:
-  - controller
-  resources:
-  - podsecuritypolicies
-  verbs:
-  - use
-- apiGroups:
   - admissionregistration.k8s.io
   resourceNames:
   - metallb-webhook-configuration
@@ -1588,14 +1580,6 @@ rules:
   verbs:
   - create
   - patch
-- apiGroups:
-  - policy
-  resourceNames:
-  - speaker
-  resources:
-  - podsecuritypolicies
-  verbs:
-  - use
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
@@ -1709,7 +1693,7 @@ spec:
           value: memberlist
         - name: METALLB_DEPLOYMENT
           value: controller
-        image: quay.io/metallb/controller:v0.13.9
+        image: quay.io/metallb/controller:v0.14.9
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -1739,7 +1723,7 @@ spec:
           allowPrivilegeEscalation: false
           capabilities:
             drop:
-            - all
+            - ALL
           readOnlyRootFilesystem: true
         volumeMounts:
         - mountPath: /tmp/k8s-webhook-server/serving-certs
@@ -1751,6 +1735,8 @@ spec:
         fsGroup: 65534
         runAsNonRoot: true
         runAsUser: 65534
+        seccompProfile:
+          type: RuntimeDefault
       serviceAccountName: controller
       terminationGracePeriodSeconds: 0
       volumes:
@@ -1802,7 +1788,7 @@ spec:
           value: app=metallb,component=speaker
         - name: METALLB_ML_SECRET_KEY_PATH
           value: /etc/ml_secret_key
-        image: quay.io/metallb/speaker:v0.13.9
+        image: quay.io/metallb/speaker:v0.14.9
         livenessProbe:
           failureThreshold: 3
           httpGet:
