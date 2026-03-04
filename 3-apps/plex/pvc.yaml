@@ -6,7 +6,7 @@ metadata:
 spec:
   storageClassName: "topolvm-provisioner"
   accessModes:
-    - ReadWriteMany             # < Multiple pods can write to storage. Same value as pv
+    - ReadWriteOnce
   volumeMode: Filesystem
   resources:
     requests:
@@ -20,7 +20,7 @@ metadata:
 spec:
   storageClassName: "topolvm-provisioner"
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
   volumeMode: Filesystem
   resources:
     requests:
